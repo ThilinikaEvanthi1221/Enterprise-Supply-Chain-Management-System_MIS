@@ -22,7 +22,10 @@ export default function MedicalTopNav({ onToggleSidebar, onToggleTheme, isDark, 
         <Menu className="w-5 h-5" />
       </Button>
 
-      {/* Global Search */}
+      {/* Spacer to push search to center */}
+      <div className="flex-1"></div>
+
+      {/* Global Search - Centered */}
       <div className="flex-1 max-w-2xl">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
@@ -34,6 +37,9 @@ export default function MedicalTopNav({ onToggleSidebar, onToggleTheme, isDark, 
           />
         </div>
       </div>
+
+      {/* Spacer to balance and push icons to right */}
+      <div className="flex-1"></div>
 
       {/* Right Side Actions */}
       <div className="flex items-center gap-2">
