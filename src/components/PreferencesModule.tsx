@@ -62,17 +62,20 @@ export function PreferencesModule({ currentUser, isDark, onToggleTheme }: Prefer
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between p-4 bg-secondary/50 rounded-lg border border-border">
               <div className="flex items-center gap-3">
-                {isDark ? <Moon className="h-5 w-5 text-muted-foreground" /> : <Sun className="h-5 w-5 text-muted-foreground" />}
+                {isDark ? <Moon className="h-5 w-5 text-primary" /> : <Sun className="h-5 w-5 text-primary" />}
                 <div>
-                  <Label>Theme Mode</Label>
+                  <Label className="text-foreground font-medium">Theme Mode</Label>
                   <p className="text-sm text-muted-foreground">
                     {isDark ? 'Dark mode is active' : 'Light mode is active'}
                   </p>
                 </div>
               </div>
-              <Switch checked={isDark} onCheckedChange={onToggleTheme} />
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-muted-foreground">{isDark ? 'Dark' : 'Light'}</span>
+                <Switch checked={isDark} onCheckedChange={onToggleTheme} />
+              </div>
             </div>
 
             <div className="space-y-2">
@@ -121,41 +124,41 @@ export function PreferencesModule({ currentUser, isDark, onToggleTheme }: Prefer
               Notifications
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="flex items-center justify-between">
+          <CardContent className="space-y-4">
+            <div className="flex items-center justify-between p-4 bg-secondary/50 rounded-lg border border-border">
               <div className="flex items-center gap-3">
-                <Mail className="h-5 w-5 text-muted-foreground" />
+                <Mail className="h-5 w-5 text-primary" />
                 <div>
-                  <Label>Email Notifications</Label>
+                  <Label className="text-foreground font-medium">Email Notifications</Label>
                   <p className="text-sm text-muted-foreground">Receive updates via email</p>
                 </div>
               </div>
               <Switch checked={emailNotifications} onCheckedChange={setEmailNotifications} />
             </div>
 
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between p-4 bg-secondary/50 rounded-lg border border-border">
               <div className="flex items-center gap-3">
-                <Smartphone className="h-5 w-5 text-muted-foreground" />
+                <Smartphone className="h-5 w-5 text-primary" />
                 <div>
-                  <Label>SMS Notifications</Label>
+                  <Label className="text-foreground font-medium">SMS Notifications</Label>
                   <p className="text-sm text-muted-foreground">Receive critical alerts via SMS</p>
                 </div>
               </div>
               <Switch checked={smsNotifications} onCheckedChange={setSmsNotifications} />
             </div>
 
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between p-4 bg-secondary/50 rounded-lg border border-border">
               <div className="flex items-center gap-3">
-                <Bell className="h-5 w-5 text-muted-foreground" />
+                <Bell className="h-5 w-5 text-primary" />
                 <div>
-                  <Label>Push Notifications</Label>
+                  <Label className="text-foreground font-medium">Push Notifications</Label>
                   <p className="text-sm text-muted-foreground">Browser notifications</p>
                 </div>
               </div>
               <Switch checked={pushNotifications} onCheckedChange={setPushNotifications} />
             </div>
 
-            <div className="pt-4 border-t border-border">
+            <div className="pt-2 border-t border-border">
               <p className="text-sm text-muted-foreground">
                 📧 Notifications will be sent to: <span className="font-medium text-foreground">{currentUser.email}</span>
               </p>
