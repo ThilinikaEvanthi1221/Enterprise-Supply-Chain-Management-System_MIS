@@ -18,6 +18,7 @@ import QualityControlModule from './components/QualityControlModule';
 import AnalyticsModule from './components/AnalyticsModule';
 import UserManagementModule from './components/UserManagementModule';
 import { SettingsModule } from './components/SettingsModule';
+import { PreferencesModule } from './components/PreferencesModule';
 import { User, ROLE_PERMISSIONS } from './types/auth';
 
 export default function App() {
@@ -118,6 +119,9 @@ export default function App() {
         return <UserManagementModule />;
       case 'settings':
         return <SettingsModule />;
+      case 'preferences':
+        if (!currentUser) return <MedicalDashboard />;
+        return <PreferencesModule currentUser={currentUser} isDark={isDark} onToggleTheme={handleToggleTheme} />;
       default:
         return <MedicalDashboard />;
     }

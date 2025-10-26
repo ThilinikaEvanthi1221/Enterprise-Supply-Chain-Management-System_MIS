@@ -31,17 +31,30 @@ const menuItems = [
   { id: 'analytics', label: 'Analytics', icon: BarChart3 },
   { id: 'users', label: 'Users', icon: Users },
   { id: 'settings', label: 'Settings', icon: Settings },
+  { id: 'preferences', label: 'Preferences', icon: Settings },
 ];
 
 export default function MedicalSidebar({ activeModule, onModuleChange, collapsed, currentUser }: MedicalSidebarProps) {
-  // Filter menu items based on user role
+  // Filter menu items based on user role and map preferences to settings for display
   const visibleMenuItems = menuItems.filter(item => {
     if (!currentUser) return true; // Show all if no user (shouldn't happen)
-    if (currentUser.role === 'admin') return true; // Admin sees all
+    if (currentUser.role === 'admin') {
+      // Admin sees settings, not preferences
+      return item.id !== 'preferences';
+    }
+    
+    // Non-admin users see preferences, not settings
+    if (item.id === 'settings') return false;
     
     // Get allowed modules for this user
     const allowedModules = ROLE_PERMISSIONS[currentUser.role];
     return allowedModules.includes(item.id);
+  }).map(item => {
+    // Map preferences to appropriate active state
+    if (item.id === 'preferences' && activeModule === 'preferences') {
+      return { ...item, isActive: true };
+    }
+    return item;
   });
 
   return (

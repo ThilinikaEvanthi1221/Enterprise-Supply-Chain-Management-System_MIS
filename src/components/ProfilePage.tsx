@@ -162,11 +162,13 @@ export default function ProfilePage({ currentUser }: ProfilePageProps) {
             { id: 'analytics', label: 'Analytics' },
             { id: 'users', label: 'Users' },
             { id: 'settings', label: 'Settings' },
+            { id: 'preferences', label: 'Preferences' },
           ].map((module) => {
-            const hasAccess = currentUser.role === 'admin' || 
-              (currentUser.role === 'procurement-manager' && ['dashboard', 'procurement', 'inventory', 'production', 'analytics', 'settings'].includes(module.id)) ||
-              (currentUser.role === 'warehouse-officer' && ['dashboard', 'warehouse', 'inventory', 'orders', 'settings'].includes(module.id)) ||
-              (currentUser.role === 'distribution-manager' && ['dashboard', 'orders', 'warehouse', 'inventory', 'analytics', 'settings'].includes(module.id));
+            const hasAccess = currentUser.role === 'admin' 
+              ? module.id !== 'preferences'  // Admin has settings, not preferences
+              : (currentUser.role === 'procurement-manager' && ['dashboard', 'procurement', 'inventory', 'production', 'analytics', 'preferences'].includes(module.id)) ||
+                (currentUser.role === 'warehouse-officer' && ['dashboard', 'warehouse', 'inventory', 'orders', 'preferences'].includes(module.id)) ||
+                (currentUser.role === 'distribution-manager' && ['dashboard', 'orders', 'warehouse', 'inventory', 'analytics', 'preferences'].includes(module.id));
 
             return (
               <div
