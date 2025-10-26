@@ -69,19 +69,22 @@ export const ROLE_PERMISSIONS: Record<UserRole, string[]> = {
     'procurement',
     'inventory',
     'production',
-    'analytics'
+    'analytics',
+    'settings'
   ],
   'warehouse-officer': [
     'dashboard',
     'warehouse',
     'inventory',
-    'orders'
+    'orders',
+    'settings'
   ],
   'distribution-manager': [
     'dashboard',
     'orders',
     'warehouse',
     'inventory',
-    'analytics'
+    'analytics',
+    'settings'
   ]
 };

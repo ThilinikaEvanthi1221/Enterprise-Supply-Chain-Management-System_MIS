@@ -84,7 +84,7 @@ const usersData = [
 
 const systemSettings = {
   general: {
-    companyName: 'TranSphere Logistics',
+    companyName: 'Haleon',
     timezone: 'America/New_York',
     language: 'English',
     dateFormat: 'MM/DD/YYYY',

@@ -11,9 +11,10 @@ interface MedicalTopNavProps {
   isDark: boolean;
   onLogout: () => void;
   currentUser: UserType | null;
+  onNavigateToProfile?: () => void;
 }
 
-export default function MedicalTopNav({ onToggleSidebar, onToggleTheme, isDark, onLogout, currentUser }: MedicalTopNavProps) {
+export default function MedicalTopNav({ onToggleSidebar, onToggleTheme, isDark, onLogout, currentUser, onNavigateToProfile }: MedicalTopNavProps) {
   return (
     <header className="h-16 bg-card border-b border-border flex items-center px-4 gap-4 flex-shrink-0">
       {/* Menu Toggle */}
@@ -94,7 +95,7 @@ export default function MedicalTopNav({ onToggleSidebar, onToggleTheme, isDark, 
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={onNavigateToProfile}>
               <User className="w-4 h-4 mr-2" />
               Profile
             </DropdownMenuItem>

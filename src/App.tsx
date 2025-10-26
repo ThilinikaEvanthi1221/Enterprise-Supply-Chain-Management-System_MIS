@@ -8,6 +8,7 @@ import MedicalDashboard from './components/MedicalDashboard';
 import ProcurementDashboard from './components/ProcurementDashboard';
 import WarehouseDashboard from './components/WarehouseDashboard';
 import DistributionDashboard from './components/DistributionDashboard';
+import ProfilePage from './components/ProfilePage';
 import InventoryModule from './components/InventoryModule';
 import ProcurementModule from './components/ProcurementModule';
 import ProductionModule from './components/ProductionModule';
@@ -63,6 +64,12 @@ export default function App() {
   };
 
   const renderContent = () => {
+    // Show profile page
+    if (activeModule === 'profile') {
+      if (!currentUser) return <MedicalDashboard />;
+      return <ProfilePage currentUser={currentUser} />;
+    }
+
     // Show role-specific dashboard for dashboard module
     if (activeModule === 'dashboard') {
       if (!currentUser) return <MedicalDashboard />;
@@ -146,6 +153,7 @@ export default function App() {
             isDark={isDark}
             onLogout={handleLogout}
             currentUser={currentUser}
+            onNavigateToProfile={() => setActiveModule('profile')}
           />
 
           {/* Main Content */}
