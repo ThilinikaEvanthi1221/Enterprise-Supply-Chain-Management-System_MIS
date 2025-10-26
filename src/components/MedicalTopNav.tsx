@@ -1,20 +1,19 @@
-import { useState } from 'react';
 import { Search, Bell, User, Menu, Sun, Moon, LogOut } from 'lucide-react';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from './ui/dropdown-menu';
+import { User as UserType } from '../types/auth';
 
 interface MedicalTopNavProps {
   onToggleSidebar: () => void;
   onToggleTheme: () => void;
   isDark: boolean;
   onLogout: () => void;
+  currentUser: UserType | null;
 }
 
-export default function MedicalTopNav({ onToggleSidebar, onToggleTheme, isDark, onLogout }: MedicalTopNavProps) {
-  const [showSearch, setShowSearch] = useState(false);
-
+export default function MedicalTopNav({ onToggleSidebar, onToggleTheme, isDark, onLogout, currentUser }: MedicalTopNavProps) {
   return (
     <header className="h-16 bg-card border-b border-border flex items-center px-4 gap-4 flex-shrink-0">
       {/* Menu Toggle */}
@@ -32,8 +31,6 @@ export default function MedicalTopNav({ onToggleSidebar, onToggleTheme, isDark, 
           <Input
             placeholder="Search products (Sensodyne, Centrum, Panadol...), suppliers, batches..."
             className="pl-10 bg-input-background"
-            onFocus={() => setShowSearch(true)}
-            onBlur={() => setTimeout(() => setShowSearch(false), 200)}
           />
         </div>
       </div>
@@ -89,8 +86,10 @@ export default function MedicalTopNav({ onToggleSidebar, onToggleTheme, isDark, 
                 <User className="w-4 h-4 text-primary" />
               </div>
               <div className="hidden md:block text-left">
-                <p className="text-sm text-foreground">Admin User</p>
-                <p className="text-xs text-muted-foreground">Administrator</p>
+                <p className="text-sm text-foreground">{currentUser?.name || 'User'}</p>
+                <p className="text-xs text-muted-foreground capitalize">
+                  {currentUser?.role.replace('-', ' ') || 'Role'}
+                </p>
               </div>
             </Button>
           </DropdownMenuTrigger>

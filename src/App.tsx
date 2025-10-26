@@ -5,6 +5,9 @@ import Login from './components/Login';
 import MedicalTopNav from './components/MedicalTopNav';
 import MedicalSidebar from './components/MedicalSidebar';
 import MedicalDashboard from './components/MedicalDashboard';
+import ProcurementDashboard from './components/ProcurementDashboard';
+import WarehouseDashboard from './components/WarehouseDashboard';
+import DistributionDashboard from './components/DistributionDashboard';
 import InventoryModule from './components/InventoryModule';
 import ProcurementModule from './components/ProcurementModule';
 import ProductionModule from './components/ProductionModule';
@@ -14,9 +17,11 @@ import QualityControlModule from './components/QualityControlModule';
 import AnalyticsModule from './components/AnalyticsModule';
 import UserManagementModule from './components/UserManagementModule';
 import { SettingsModule } from './components/SettingsModule';
+import { User, ROLE_PERMISSIONS } from './types/auth';
 
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [activeModule, setActiveModule] = useState('dashboard');
   const [isDark, setIsDark] = useState(false);
@@ -30,11 +35,13 @@ export default function App() {
     }
   }, []);
 
-  const handleLogin = () => {
+  const handleLogin = (user: User) => {
+    setCurrentUser(user);
     setIsAuthenticated(true);
   };
 
   const handleLogout = () => {
+    setCurrentUser(null);
     setIsAuthenticated(false);
     setActiveModule('dashboard');
   };
@@ -45,10 +52,47 @@ export default function App() {
     localStorage.setItem('theme', !isDark ? 'dark' : 'light');
   };
 
+  // Get allowed modules for current user
+  const allowedModules = currentUser ? ROLE_PERMISSIONS[currentUser.role] : [];
+  
+  // Check if user can access the module
+  const canAccessModule = (module: string) => {
+    if (!currentUser) return false;
+    if (currentUser.role === 'admin') return true;
+    return allowedModules.includes(module);
+  };
+
   const renderContent = () => {
+    // Show role-specific dashboard for dashboard module
+    if (activeModule === 'dashboard') {
+      if (!currentUser) return <MedicalDashboard />;
+      
+      switch (currentUser.role) {
+        case 'procurement-manager':
+          return <ProcurementDashboard />;
+        case 'warehouse-officer':
+          return <WarehouseDashboard />;
+        case 'distribution-manager':
+          return <DistributionDashboard />;
+        case 'admin':
+        default:
+          return <MedicalDashboard />;
+      }
+    }
+
+    // Check access before showing module
+    if (!canAccessModule(activeModule)) {
+      return (
+        <div className="flex items-center justify-center h-full">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold text-foreground mb-2">Access Denied</h2>
+            <p className="text-muted-foreground">You don't have permission to access this module.</p>
+          </div>
+        </div>
+      );
+    }
+
     switch (activeModule) {
-      case 'dashboard':
-        return <MedicalDashboard />;
       case 'inventory':
         return <InventoryModule />;
       case 'procurement':
@@ -90,6 +134,7 @@ export default function App() {
           activeModule={activeModule}
           onModuleChange={setActiveModule}
           collapsed={sidebarCollapsed}
+          currentUser={currentUser}
         />
 
         {/* Main content area with top nav and content */}
@@ -100,6 +145,7 @@ export default function App() {
             onToggleTheme={handleToggleTheme}
             isDark={isDark}
             onLogout={handleLogout}
+            currentUser={currentUser}
           />
 
           {/* Main Content */}

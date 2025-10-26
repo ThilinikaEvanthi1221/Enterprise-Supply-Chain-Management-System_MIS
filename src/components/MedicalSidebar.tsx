@@ -11,11 +11,13 @@ import {
   Settings,
   ChevronRight
 } from 'lucide-react';
+import { User, ROLE_PERMISSIONS } from '../types/auth';
 
 interface MedicalSidebarProps {
   activeModule: string;
   onModuleChange: (module: string) => void;
   collapsed: boolean;
+  currentUser: User | null;
 }
 
 const menuItems = [
@@ -31,7 +33,17 @@ const menuItems = [
   { id: 'settings', label: 'Settings', icon: Settings },
 ];
 
-export default function MedicalSidebar({ activeModule, onModuleChange, collapsed }: MedicalSidebarProps) {
+export default function MedicalSidebar({ activeModule, onModuleChange, collapsed, currentUser }: MedicalSidebarProps) {
+  // Filter menu items based on user role
+  const visibleMenuItems = menuItems.filter(item => {
+    if (!currentUser) return true; // Show all if no user (shouldn't happen)
+    if (currentUser.role === 'admin') return true; // Admin sees all
+    
+    // Get allowed modules for this user
+    const allowedModules = ROLE_PERMISSIONS[currentUser.role];
+    return allowedModules.includes(item.id);
+  });
+
   return (
     <aside 
       className={`h-screen bg-sidebar border-r border-sidebar-border transition-all duration-300 flex-shrink-0 ${
@@ -62,7 +74,7 @@ export default function MedicalSidebar({ activeModule, onModuleChange, collapsed
         {/* Navigation */}
         <nav className="flex-1 overflow-y-auto py-4">
           <ul className="space-y-1 px-2">
-            {menuItems.map((item) => {
+            {visibleMenuItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeModule === item.id;
 

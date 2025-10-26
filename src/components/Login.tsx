@@ -4,9 +4,10 @@ import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Card } from './ui/card';
+import { USERS, User } from '../types/auth';
 
 interface LoginProps {
-  onLogin: () => void;
+  onLogin: (user: User) => void;
 }
 
 export default function Login({ onLogin }: LoginProps) {
@@ -14,15 +15,23 @@ export default function Login({ onLogin }: LoginProps) {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [error, setError] = useState('');
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setError('');
     
-    // Simulate login delay
+    // Find user in hardcoded database
+    const user = USERS.find(u => u.email === email && u.password === password);
+    
     setTimeout(() => {
       setIsLoading(false);
-      onLogin();
+      if (user) {
+        onLogin(user);
+      } else {
+        setError('Invalid email or password');
+      }
     }, 1000);
   };
 
@@ -117,6 +126,12 @@ export default function Login({ onLogin }: LoginProps) {
               </div>
 
               <form onSubmit={handleLogin} className="space-y-6">
+                {error && (
+                  <div className="p-3 bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800 rounded-lg">
+                    <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+                  </div>
+                )}
+                
                 <div className="space-y-2">
                   <Label htmlFor="email">Email Address</Label>
                   <div className="relative">
